@@ -1,9 +1,10 @@
 #include "rshell.h"
 using namespace std;
 Rshell::Rshell() {
+	userInput = "not written to yet*";
 	username = getlogin();
 	int temp = gethostname(hostname, 100);
-	if(temp  == -1) {
+	if(temp == -1) {
 		cout << "error finding hostname ";
 	}
 }
@@ -16,8 +17,12 @@ void Rshell::prompt() {
 void Rshell::terminal() {
 	while(1) {
 		prompt();
-		//ye
+		parse();
 	}
+}
+void Rshell::parse() {
+	getline(cin, userInput);
+	cout << userInput << endl;
 }
 /*
 int main() {
