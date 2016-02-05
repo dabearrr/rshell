@@ -12,7 +12,7 @@ void Rshell::prompt() {
 	cout << username;
 	cout << "@";
 	cout << hostname;
-	cout << "$";
+	cout << "$ ";
 }
 void Rshell::terminal() {
 	while(1) {

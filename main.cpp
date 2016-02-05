@@ -4,7 +4,7 @@ using namespace std;
 
 int main() {
 	Rshell commandLine;
-	commandLine.prompt();
-	//commandLine.terminal();	
+	//commandLine.prompt();
+	commandLine.terminal();	
 	return 0;
 }
