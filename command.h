@@ -3,16 +3,19 @@
 #define COMMAND_H
 
 #include "base.h"
-#include <string>
 
 class Command : public Base
 {
 	private:
 	bool data;
 	string name;
+	string commandName;
+	vector<string> args;	
 
 	public:
-	void exec();	
+	Command(string n);
+	Command(string n, vector<string> a);
+	bool exec();	
 
 };
 
