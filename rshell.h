@@ -5,16 +5,17 @@
 #include <unistd.h>
 #include <iostream>
 #include <string>
-
+#include <boost/foreach.hpp>
+#include <boost/tokenizer.hpp>
 using namespace std;
 class Rshell
 {
     private:
     string userInput;
-	char hostname[100];
-	char* username;
+    char hostname[100];
+    char* username;
         
-	public:
+    public:
     Rshell();
     void terminal();
     void prompt();

@@ -1,5 +1,6 @@
 #include "rshell.h"
 using namespace std;
+using namespace boost;
 Rshell::Rshell() {
 	userInput = "not written to yet*";
 	username = getlogin();
@@ -22,7 +23,10 @@ void Rshell::terminal() {
 }
 void Rshell::parse() {
 	getline(cin, userInput);
-	cout << userInput << endl;
+	//cout << userInput << endl;
+	char* evp[] = {const_cast<char*>( userInput.c_str() ), (char*) 0 };
+	execvp( const_cast<char*>( userInput.c_str() ) , evp);
+	
 }
 /*
 int main() {
