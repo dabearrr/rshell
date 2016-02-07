@@ -35,9 +35,9 @@ void Rshell::parse() {
 		cout << t << endl;
 	}*/
 
-	Command command = Command();
-	int boostIndex1 = 0;
-	BOOST_FOREACH(string t, tokens) {
+	//Command command = Command();
+	//int boostIndex1 = 0;
+	/*BOOST_FOREACH(string t, tokens) {
 		if(boostIndex1 == 0) {
 			command.rename(t);
 		}
@@ -45,7 +45,11 @@ void Rshell::parse() {
 			command.appendargs(t);
 		}
 		boostIndex1++;	
-	}
+	}*/
+	 BOOST_FOREACH(string t, tokens) {
+         	       
+        }
+	
 
 	command.print();		
 	Base* executable = new Command(command);
