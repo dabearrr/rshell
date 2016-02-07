@@ -17,8 +17,14 @@ Command::Command(const Command &c) {
 	commandName = c.getName();
 }	
 bool Command::exec() {	
-	char* evp[] = {const_cast<char*>( commandName.c_str() ), (char*) 0 };
-        execvp( const_cast<char*>( commandName.c_str() ) , evp);
+	/*char* evp[] = {const_cast<char*>( commandName.c_str() ), (char*) 0 };
+        execvp( const_cast<char*>( commandName.c_str() ) , evp);*/
+	cout << " executing!" << commandName << endl;
+	// insert exec code here!
+	
+	//assuming it executed correctly
+	data = true;
+	return true;
 }
 void Command::rearg(vector <string> &v) {
 	args.clear();
