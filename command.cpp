@@ -16,7 +16,7 @@ Command::Command(string n, vector<string> a) {
 Command::Command(const Command &c) {
 	commandName = c.getName();
 }	
-bool Command::exec() {
+bool Command::exec() {	
 	char* evp[] = {const_cast<char*>( commandName.c_str() ), (char*) 0 };
         execvp( const_cast<char*>( commandName.c_str() ) , evp);
 }

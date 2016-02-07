@@ -43,19 +43,24 @@ void Rshell::parse() {
 		}
 		else {
 			command.appendargs(t);
-		}	
+		}
+		boostIndex1++;	
 	}
 
 	command.print();		
-
+	Base* executable = new Command(command);
+	
 	pid_t pID = fork();
 	if(pID == 0) { //child
 		cout << "Child Process " << endl;
 				
 		//execvp usage requires a const_cast<char*> of a cstr for arg1
 		//and a char* array with the const_cast<char*> cstr and following arguments
-		char* evp[] = {const_cast<char*>( userInput.c_str() ), (char*) 0 };
-		execvp( const_cast<char*>( userInput.c_str() ) , evp);
+		/*char* evp[] = {const_cast<char*>( userInput.c_str() ), (char*) 0 };
+		execvp( const_cast<char*>( userInput.c_str() ) , evp);*/
+	
+		//this will call execvp on our command
+		executable->exec();
 	}
 	else if(pID < 0) {
 		cout << "Fork failure" << endl;
