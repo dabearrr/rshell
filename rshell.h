@@ -18,7 +18,7 @@ class Rshell
     string userInput;
     char hostname[100];
     char* username;
-        
+    vector<string> userTokens;       
     public:
     Rshell();
     void terminal();
