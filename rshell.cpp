@@ -30,15 +30,28 @@ void Rshell::parse() {
 	//boost lib usages
 	char_separator<char> sep(" ");
 	tokenizer< char_separator<char> > tokens(userInput, sep);
-	cout << "Tokenizer tokens: " << endl;
+	/*cout << "Tokenizer tokens: " << endl;
 	BOOST_FOREACH(string t, tokens) {
 		cout << t << endl;
+	}*/
+
+	Command command = Command();
+	int boostIndex1 = 0;
+	BOOST_FOREACH(string t, tokens) {
+		if(boostIndex1 == 0) {
+			command.rename(t);
+		}
+		else {
+			command.appendargs(t);
+		}	
 	}
-	
+
+	command.print();		
+
 	pid_t pID = fork();
 	if(pID == 0) { //child
 		cout << "Child Process " << endl;
-			
+				
 		//execvp usage requires a const_cast<char*> of a cstr for arg1
 		//and a char* array with the const_cast<char*> cstr and following arguments
 		char* evp[] = {const_cast<char*>( userInput.c_str() ), (char*) 0 };
@@ -49,6 +62,7 @@ void Rshell::parse() {
 		exit(1);
 	}
 	else {	//parent
+		//waitPID(); << Need help implemeting this to wait for child to finish
 		cout << "Parent does nothing" << endl;
 	}
 }

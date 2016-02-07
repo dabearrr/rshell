@@ -13,10 +13,16 @@ class Command : public Base
 	vector<string> args;	
 
 	public:
+	Command();
 	Command(string n);
 	Command(string n, vector<string> a);
+	Command(const Command& c);
 	bool exec();	
-
+	void rename(string n){commandName = n;}
+	string getName() const {return commandName;}
+	void rearg(vector <string> &v);
+	void appendargs(string s) {args.push_back(s);}
+	void print();
 };
 
 #endif //COMMAND_H

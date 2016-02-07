@@ -10,6 +10,7 @@
 #include <boost/foreach.hpp>
 #include <boost/tokenizer.hpp>
 #include <boost/scoped_ptr.hpp>
+#include "command.h"
 using namespace std;
 class Rshell
 {
