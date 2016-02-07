@@ -46,6 +46,7 @@ void Rshell::parse() {
 		}
 		boostIndex1++;	
 	}
+	
 
 	command.print();		
 	Base* executable = new Command(command);
