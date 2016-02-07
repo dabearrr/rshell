@@ -19,6 +19,9 @@ class Rshell
     char hostname[100];
     char* username;
     vector<string> userTokens;       
+    vector<string> userCommands;
+    vector<string> userComposites;
+    vector<Base*> executables;
     public:
     Rshell();
     void terminal();

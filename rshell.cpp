@@ -51,23 +51,52 @@ void Rshell::parse() {
 	}*/
 	 BOOST_FOREACH(string t, tokens) {
 		userTokens.push_back(t);         	       
-        }
-	
-
+        }	
+	string str = "";
+	for(int i = 0; i < userTokens.size(); i++) {
+		string comp = userTokens.at(i);
+		if(comp != "||" && comp != "&&" && comp != ";") {
+			str += comp;
+		}
+		else {
+			userCommands.push_back(str);
+			if(comp == "||") {
+				userComposites.push_back("||");
+			}
+			else if(comp == "&&") {
+				userComposites.push_back(";");
+			}
+			else {
+				userComposites.push_back("&&");
+			}
+			str = "";
+		}
+	}
+	if(str != "") {
+		userCommands.push_back(str);
+		str = "";
+	}
+	if(userComposites.empty()) {
+		Base* element = new Command(userCommands);
+		executables.push_back(element);
+	}
+		
 	//command.print();		
 	//Base* executable = new Command(command);
 	
+	//We will localise this in our exec() member of Command
+	/*
 	pid_t pID = fork();
 	if(pID == 0) { //child
 		cout << "Child Process " << endl;
-				
+			
 		//execvp usage requires a const_cast<char*> of a cstr for arg1
 		//and a char* array with the const_cast<char*> cstr and following arguments
-		/*char* evp[] = {const_cast<char*>( userInput.c_str() ), (char*) 0 };
-		execvp( const_cast<char*>( userInput.c_str() ) , evp);*/
-	
+
 		//this will call execvp on our command
-		//executable->exec();
+		for(int i = 0; i < i.size(); i++) {
+			executables.at(i)->exec();
+		}
 	}
 	else if(pID < 0) {
 		cout << "Fork failure" << endl;
@@ -77,4 +106,5 @@ void Rshell::parse() {
 		//waitPID(); << Need help implemeting this to wait for child to finish
 		cout << "Parent does nothing" << endl;
 	}
+	*/
 }

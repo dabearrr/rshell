@@ -1,8 +1,8 @@
 #include "command.h"
 Command::Command() {
-	commandName = "";
+	//nothing?
 }
-Command::Command(string n) {
+/*Command::Command(string n) {
 	commandName = n;
 }
 Command::Command(string n, vector<string> a) {
@@ -15,11 +15,12 @@ Command::Command(string n, vector<string> a) {
 }
 Command::Command(const Command &c) {
 	commandName = c.getName();
-}	
+}*/
+	
 bool Command::exec() {	
 	/*char* evp[] = {const_cast<char*>( commandName.c_str() ), (char*) 0 };
         execvp( const_cast<char*>( commandName.c_str() ) , evp);*/
-	cout << " executing!" << commandName << endl;
+	cout << " executing: " << args.at(0) << endl;
 	// insert exec code here!
 	
 	//assuming it executed correctly
@@ -34,7 +35,7 @@ void Command::rearg(vector <string> &v) {
 }
 
 void Command::print() {
-	cout << "Command Name: " << commandName << endl;
+	//cout << "Command Name: " << commandName << endl;
 	cout << "Vector of Arguments: " << endl;
 	for (int i = 0; i < args.size(); i++) {
 		cout << args.at(i) << " ";
