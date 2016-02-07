@@ -11,7 +11,11 @@
 #include <boost/tokenizer.hpp>
 #include <boost/scoped_ptr.hpp>
 #include "command.h"
+#include <sys/wait.h>
+#include <stdio.h>
+
 using namespace std;
+
 class Rshell
 {
     private:

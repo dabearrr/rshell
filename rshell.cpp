@@ -1,4 +1,5 @@
 #include "rshell.h"
+
 using namespace std;
 using namespace boost;
 Rshell::Rshell() {
@@ -69,6 +70,13 @@ void Rshell::parse() {
 	else {	//parent
 		//waitPID(); << Need help implemeting this to wait for child to finish
 		cout << "Parent does nothing" << endl;
+		int status;
+		wait(&status);
+		if(status == -1)
+		{
+			cout << "ERROR with wait()" << endl;
+			exit(1);
+		}
 	}
 }
 
