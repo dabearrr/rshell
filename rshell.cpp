@@ -10,12 +10,14 @@ Rshell::Rshell() {
 		cout << "error finding hostname ";
 	}
 }
+
 void Rshell::prompt() {
 	cout << username;
 	cout << "@";
 	cout << hostname;
 	cout << "$ ";
 }
+
 void Rshell::terminal() {
 	//terminal will prompt then parse the input
 	while(1) {
@@ -23,6 +25,7 @@ void Rshell::terminal() {
 		parse();
 	}
 }
+
 void Rshell::parse() {
 	//take in input
 	getline(cin, userInput);
@@ -47,12 +50,12 @@ void Rshell::parse() {
 		boostIndex1++;	
 	}*/
 	 BOOST_FOREACH(string t, tokens) {
-         	       
+		userTokens.push_back(t);         	       
         }
 	
 
-	command.print();		
-	Base* executable = new Command(command);
+	//command.print();		
+	//Base* executable = new Command(command);
 	
 	pid_t pID = fork();
 	if(pID == 0) { //child
@@ -64,7 +67,7 @@ void Rshell::parse() {
 		execvp( const_cast<char*>( userInput.c_str() ) , evp);*/
 	
 		//this will call execvp on our command
-		executable->exec();
+		//executable->exec();
 	}
 	else if(pID < 0) {
 		cout << "Fork failure" << endl;
@@ -75,4 +78,3 @@ void Rshell::parse() {
 		cout << "Parent does nothing" << endl;
 	}
 }
-
