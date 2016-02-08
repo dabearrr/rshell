@@ -16,7 +16,14 @@ Command::Command(string n, vector<string> a) {
 Command::Command(const Command &c) {
 	commandName = c.getName();
 }*/
-	
+Command::Command(vector <string> &v) {
+	/*for(int i = 0; i < v.size(); i++) {
+		cout << v.at(i) << " ";
+		args.push_back(v.at(i));
+	}*/
+	args = v;
+}
+
 bool Command::exec() {	
 	if(args.at(0) == "exit") {
 		exit(0);
@@ -25,14 +32,14 @@ bool Command::exec() {
 	/*char* evp[] = {const_cast<char*>( commandName.c_str() ), (char*) 0 };
         execvp( const_cast<char*>( commandName.c_str() ) , evp);*/
         
-	cout << " executing: " << args.at(0) << endl;
+	cout << "Executing: " << args.at(0) << endl;
 	// insert exec code here!
 	vector<char*> temp;
 	for(int i = 0; i <args.size(); i++) {
 		temp.push_back(const_cast<char*>(args.at(i).c_str()));
 	}
-	temp.push_back((char*) 0 );
-	char** argArray = &temp.at(0);
+	temp.push_back(NULL);
+	char** argArray = &temp[0];
 	
 	pid_t pID = fork();
 	if(pID == 0) { //child

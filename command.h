@@ -17,7 +17,7 @@ class Command : public Base
 	//Command(string n);
 	//Command(string n, vector<string> a);
 	//Command(const Command& c);
-	Command(vector<string> a) {args = a;}
+	Command(vector<string> &v);
 	bool exec();	
 	//void rename(string n){commandName = n;}
 	//string getName() const {return commandName;}

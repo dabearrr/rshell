@@ -37,8 +37,8 @@ void Rshell::parse() {
 	//boost lib usages
 	char_separator<char> sep(" ");
 	tokenizer< char_separator<char> > tokens(userInput, sep);
-	/*cout << "Tokenizer tokens: " << endl;
-	BOOST_FOREACH(string t, tokens) {
+	//cout << "Tokenizer tokens: " << endl;
+	/*BOOST_FOREACH(string t, tokens) {
 		cout << t << endl;
 	}*/
 
@@ -60,7 +60,7 @@ void Rshell::parse() {
 	for(int i = 0; i < userTokens.size(); i++) {
 		string comp = userTokens.at(i);
 		if(comp != "||" && comp != "&&" && comp != ";") {
-			str += comp;
+			str = str + " " + comp;
 		}
 		else {
 			userCommands.push_back(str);
@@ -80,8 +80,20 @@ void Rshell::parse() {
 		userCommands.push_back(str);
 		str = "";
 	}
+	for(int i = 0; i < userCommands.size(); i++) {
+		cout << userCommands.at(i) <<  i << " ";
+	}
 	if(userComposites.empty()) {
-		Base* element = new Command(userCommands);
+		string s = userCommands.at(0);
+		vector <string> temp;
+		tokenizer< char_separator<char> > tempTokens(s, sep);
+       		//cout << "Tokenizer tokens: " << endl;
+       		BOOST_FOREACH(string t, tempTokens) {
+        	        cout << t << " ";
+			temp.push_back(t);
+	        }
+
+		Base* element = new Command(temp);
 		//executables.push_back(element);
 		element->exec();
 	}
