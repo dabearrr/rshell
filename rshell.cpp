@@ -29,7 +29,11 @@ void Rshell::terminal() {
 void Rshell::parse() {
 	//take in input
 	getline(cin, userInput);
-
+	
+	//remove comments
+	userInput = userInput.substr(0, userInput.find('#', 0));
+	cout << userInput << endl;
+	
 	//boost lib usages
 	char_separator<char> sep(" ");
 	tokenizer< char_separator<char> > tokens(userInput, sep);
@@ -78,13 +82,14 @@ void Rshell::parse() {
 	}
 	if(userComposites.empty()) {
 		Base* element = new Command(userCommands);
-		executables.push_back(element);
+		//executables.push_back(element);
+		element->exec();
 	}
 		
-	//command.print();		
+	//command.print();
 	//Base* executable = new Command(command);
 	
-	//We will localise this in our exec() member of Command
+	//We will localise the following in our exec() member of Command
 	/*
 	pid_t pID = fork();
 	if(pID == 0) { //child
