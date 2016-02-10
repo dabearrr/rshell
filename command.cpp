@@ -43,7 +43,7 @@ bool Command::exec() {
 	
 	pid_t pID = fork();
 	if(pID == 0) { //child
-		cout << "Child Process " << endl;
+		cout << "Child Process here calling EXECVP" << endl;
 			
 		//execvp usage requires a const_cast<char*> of a cstr for arg1
 		//and a char* array with the const_cast<char*> cstr and following arguments
@@ -57,7 +57,7 @@ bool Command::exec() {
 	}
 	else {	//parent
 		//waitPID(); << Need help implemeting this to wait for child to finish
-		cout << "Parent does nothing" << endl;
+		cout << "Parent does nothing here" << endl;
 	}
 	
 	//assuming it executed correctly

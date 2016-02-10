@@ -25,14 +25,15 @@ void Rshell::terminal() {
 		parse();
 	}
 }
-
+//PREPARE YOURSELF, A LOT OF JANK IS BELOW
+//YOU GOT THIS DUDE
 void Rshell::parse() {
 	//take in input
 	getline(cin, userInput);
 	
 	//remove comments
 	userInput = userInput.substr(0, userInput.find('#', 0));
-	cout << userInput << endl;
+	cout << "The input from the user, without comments is : " << userInput << endl;
 	
 	//boost lib usages
 	char_separator<char> sep(" ");
@@ -80,24 +81,28 @@ void Rshell::parse() {
 		userCommands.push_back(str);
 		str = "";
 	}
-	for(int i = 0; i < userCommands.size(); i++) {
+	/*for(int i = 0; i < userCommands.size(); i++) {
 		cout << userCommands.at(i) <<  i << " ";
-	}
+	}*/
 	if(userComposites.empty()) {
 		string s = userCommands.at(0);
 		vector <string> temp;
 		tokenizer< char_separator<char> > tempTokens(s, sep);
        		//cout << "Tokenizer tokens: " << endl;
        		BOOST_FOREACH(string t, tempTokens) {
-        	        cout << t << " ";
+        	        //cout << t << " ";
 			temp.push_back(t);
 	        }
 
 		Base* element = new Command(temp);
 		//executables.push_back(element);
 		element->exec();
+		//userCommands.clear();
+		//temp.clear();
 	}
-		
+	userTokens.clear();
+	userComposites.clear();
+	userCommands.clear();	
 	//command.print();
 	//Base* executable = new Command(command);
 	
