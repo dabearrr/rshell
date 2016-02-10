@@ -6,14 +6,14 @@
 
 class Composite : public Base 
 {
-        private:
+        protected:
         bool firstCommand;
 	Base* secondCommand;
 
         public:
         Composite(bool a, Base* b) { firstCommand = a; secondCommand = b; }
 	bool exec();
-        void print();
+        //void print();
 };
 
 #endif //COMPOSITE_H
