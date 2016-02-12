@@ -1,6 +1,6 @@
 #Variables
 COMPILE = g++
-FLAGS = #-g -W -Wall -Werror -ansi -pedantic
+FLAGS = -g -W -Wall -Werror -ansi -pedantic
 OBJS = command.o composite.o base.o rshell.o
 
 #Targets
