@@ -6,7 +6,7 @@ echo "Our command shell is awesome!" ; echo "You know it!" && echo "Drake" ; ls 
 echo "ls should not work and THIS STATEMENT SHOULD PRINT!"
 
 echo "Test #2"
-date ; date ; date ; echo "This should print" && echo "This should also print"
+date ; date ; date ; echo "This should print date three times" && echo "This should also print"
 
 echo "Test #3"
 date ; date || echo "This should print" || echo "This should also print"
