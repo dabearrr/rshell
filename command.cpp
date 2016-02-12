@@ -1,5 +1,7 @@
 #include "command.h"
 #include <sys/wait.h>
+#include <errno.h>
+#include <cstdio>
 
 Command::Command() {
 	//nothing?
@@ -53,11 +55,15 @@ bool Command::exec() {
 
 		//this will call execvp on our command	
 	 execvp(argArray[0], argArray);
-		
-	exit(127);
+	if(-1 == execvp(argArray[0], argArray))
+	{
+		perror("There was an error with execvp()");	
+		exit(1);
+	}
+		exit(127);
 	}	
 	else if(pID < 0) {
-		cout << "Fork failure" << endl;
+		perror("There was an error with fork().");
 		exit(1);
 	}
 
@@ -74,6 +80,7 @@ bool Command::exec() {
 			else
 			{
 				//program failed
+				perror("There was an error with wait()");
 				return false;
 			}	
 	}	
