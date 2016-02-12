@@ -100,9 +100,49 @@ void Rshell::parse() {
 		//userCommands.clear();
 		//temp.clear();
 	}
+	else {
+		//create the array of commands
+		vector <string> tempCommand;
+		string s = "";
+		for(int i = 0; i < userCommands.size(); i++) {
+			s = userCommands.at(i);
+			tokenizer< char_separator<char> > tempTokens(s, sep);
+			BOOST_FOREACH(string t, tempTokens) {
+                        	tempCommand.push_back(t);
+			}
+			Base* baseTemp = new Command(tempCommand);
+			commands.push_back(baseTemp);
+			tempCommand.clear();
+                }
+		//for(int i = 0; i < commands.size(); i++) {
+		//	commands.at(i)->exec();
+		//}
+		bool firstRun = commands.at(0)->exec();
+		for(int i = 0; i < userComposites.size(); i++) {
+                        s = userComposites.at(i);
+                        if(s == "&&") {
+				Base* baseTemp = new AndComposite(firstRun, commands.at(i+1));
+				composites.push_back(baseTemp);
+			}
+			else if(s == "||") {
+				Base* baseTemp = new OrComposite(firstRun, commands.at(i+1));
+				composites.push_back(baseTemp);
+			}
+			else {
+				Base* baseTemp = new SemiColonComposite(firstRun, commands.at(i+1));
+				composites.push_back(baseTemp);
+			}
+                        tempCommand.clear();
+                }
+		for(int i = 0; i < composites.size(); i++) {
+			composites.at(i)->exec();
+		}
+	}
 	userTokens.clear();
 	userComposites.clear();
-	userCommands.clear();	
+	userCommands.clear();
+	commands.clear();
+	composites.clear();	
 	//command.print();
 	//Base* executable = new Command(command);
 	

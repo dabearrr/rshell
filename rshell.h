@@ -11,6 +11,11 @@
 #include <boost/tokenizer.hpp>
 #include <boost/scoped_ptr.hpp>
 #include "command.h"
+#include "composite.h"
+#include "orcomposite.h"
+#include "andcomposite.h"
+#include "semicoloncomposite.h"
+
 using namespace std;
 class Rshell
 {
@@ -21,6 +26,8 @@ class Rshell
     vector<string> userTokens;       
     vector<string> userCommands;
     vector<string> userComposites;
+    vector<Base*> commands;
+    vector<Base*> composites;
     vector<Base*> executables;
     public:
     Rshell();
