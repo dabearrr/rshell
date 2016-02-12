@@ -34,10 +34,10 @@ bool Command::exec() {
 	/*char* evp[] = {const_cast<char*>( commandName.c_str() ), (char*) 0 };
         execvp( const_cast<char*>( commandName.c_str() ) , evp);*/
         
-	cout << "Executing: " << args.at(0) << endl;
+	//cout << "Executing: " << args.at(0) << endl;
 	// insert exec code here!
 	vector<char*> temp;
-	for(int i = 0; i <args.size(); i++) {
+	for(unsigned int i = 0; i <args.size(); i++) {
 		temp.push_back(const_cast<char*>(args.at(i).c_str()));
 	}
 
@@ -46,7 +46,7 @@ bool Command::exec() {
 	int status;
 	pid_t pID = fork();
 	if(pID == 0) { //child
-		cout << "Child Process here calling EXECVP" << endl;
+		//cout << "Child Process here calling EXECVP" << endl;
 			
 		//execvp usage requires a const_cast<char*> of a cstr for arg1
 		//and a char* array with the const_cast<char*> cstr and following arguments
@@ -91,7 +91,7 @@ bool Command::exec() {
 }
 void Command::rearg(vector <string> &v) {
 	args.clear();
-	for(int i = 0; i < v.size(); i++) {
+	for(unsigned int i = 0; i < v.size(); i++) {
 		args.push_back(v.at(i));
 	}
 }
@@ -99,7 +99,7 @@ void Command::rearg(vector <string> &v) {
 void Command::print() {
 	//cout << "Command Name: " << commandName << endl;
 	cout << "Vector of Arguments: " << endl;
-	for (int i = 0; i < args.size(); i++) {
+	for (unsigned int i = 0; i < args.size(); i++) {
 		cout << args.at(i) << " ";
 	}
 	cout << endl;

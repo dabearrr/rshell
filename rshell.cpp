@@ -33,7 +33,7 @@ void Rshell::parse() {
 	
 	//remove comments
 	userInput = userInput.substr(0, userInput.find('#', 0));
-	cout << "The input from the user, without comments is : " << userInput << endl;
+	//cout << "The input from the user, without comments is : " << userInput << endl;
 	
 	//boost lib usages
 	char_separator<char> sep(" ");
@@ -58,7 +58,7 @@ void Rshell::parse() {
 		userTokens.push_back(t);         	       
         }	
 	string str = "";
-	for(int i = 0; i < userTokens.size(); i++) {
+	for(unsigned int i = 0; i < userTokens.size(); i++) {
 		string comp = userTokens.at(i);
 		if(comp != "||" && comp != "&&" && comp != ";") {
 			str = str + " " + comp;
@@ -104,7 +104,7 @@ void Rshell::parse() {
 		//create the array of commands
 		vector <string> tempCommand;
 		string s = "";
-		for(int i = 0; i < userCommands.size(); i++) {
+		for(unsigned int i = 0; i < userCommands.size(); i++) {
 			s = userCommands.at(i);
 			tokenizer< char_separator<char> > tempTokens(s, sep);
 			BOOST_FOREACH(string t, tempTokens) {
@@ -118,7 +118,7 @@ void Rshell::parse() {
 		//	commands.at(i)->exec();
 		//}
 		bool firstRun = commands.at(0)->exec();
-		for(int i = 0; i < userComposites.size(); i++) {
+		for(unsigned int i = 0; i < userComposites.size(); i++) {
                         s = userComposites.at(i);
                         if(s == "&&") {
 				Base* baseTemp = new AndComposite(firstRun, commands.at(i+1));
@@ -134,7 +134,7 @@ void Rshell::parse() {
 			}
                         tempCommand.clear();
                 }
-		for(int i = 0; i < composites.size(); i++) {
+		for(unsigned int i = 0; i < composites.size(); i++) {
 			composites.at(i)->exec();
 		}
 	}
