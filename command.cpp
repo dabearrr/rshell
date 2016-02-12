@@ -28,7 +28,7 @@ Command::Command(vector <string> &v) {
 
 bool Command::exec() {	
 	if(args.at(0) == "exit") {
-		exit(0);
+		exit(1);
 	}
 	
 	/*char* evp[] = {const_cast<char*>( commandName.c_str() ), (char*) 0 };

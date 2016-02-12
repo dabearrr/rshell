@@ -1,13 +1,19 @@
 #!/bin/bash
 #tests single commands
 
-if ! ls '/var/aaaaaaa' &> /dev/null; then 
-  echo 'failed'
-fi
+ls -a
+echo "ls -a successfully executed!"
 
-if ls ~/rshell/tests > /dev/null 2>&1
-then
-    echo "There is at least one match (maybe more)!"
-else
-    echo "No files found"
-fi
+ls
+echo "ls successfully executed"
+
+clear
+echo "clear successfully executed!"
+
+ls
+echo "ls successfully executed!"
+
+
+ 
+
+
