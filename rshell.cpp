@@ -12,6 +12,7 @@ Rshell::Rshell() {
 }
 
 void Rshell::prompt() {
+	//simply prompts the user
 	cout << username;
 	cout << "@";
 	cout << hostname;
@@ -33,33 +34,28 @@ void Rshell::parse() {
 	
 	//remove comments
 	userInput = userInput.substr(0, userInput.find('#', 0));
-	//cout << "The input from the user, without comments is : " << userInput << endl;
 	
 	//boost lib usages
+	//we want to sepate the input into tokens
 	char_separator<char> sep(" ");
 	tokenizer< char_separator<char> > tokens(userInput, sep);
-	//cout << "Tokenizer tokens: " << endl;
-	/*BOOST_FOREACH(string t, tokens) {
-		cout << t << endl;
-	}*/
-
-	//Command command = Command();
-	//int boostIndex1 = 0;
-	/*BOOST_FOREACH(string t, tokens) {
-		if(boostIndex1 == 0) {
-			command.rename(t);
-		}
-		else {
-			command.appendargs(t);
-		}
-		boostIndex1++;	
-	}*/
-	 BOOST_FOREACH(string t, tokens) {
+	
+	BOOST_FOREACH(string t, tokens) {
 		userTokens.push_back(t);         	       
         }	
+	
+	//with these tokens, we will separate the commands and composites
+	//into their own string, in order to create the actual objects
+	//str is used as a temp to store the commands as we get each arg
+	//for it
 	string str = "";
 	for(unsigned int i = 0; i < userTokens.size(); i++) {
+		//comp holds the single current token
 		string comp = userTokens.at(i);
+
+		//if the token is a composite, then we have reached the end of
+		//our command, and we pull push the command string to a vector
+		//and the specific type of composite to another vector
 		if(comp != "||" && comp != "&&" && comp != ";") {
 			str = str + " " + comp;
 		}
@@ -81,27 +77,21 @@ void Rshell::parse() {
 		userCommands.push_back(str);
 		str = "";
 	}
-	/*for(int i = 0; i < userCommands.size(); i++) {
-		cout << userCommands.at(i) <<  i << " ";
-	}*/
+	//used to execute singular commands
+	//simply makes a base* to a command object and executes it
 	if(userComposites.empty()) {
 		string s = userCommands.at(0);
 		vector <string> temp;
 		tokenizer< char_separator<char> > tempTokens(s, sep);
-       		//cout << "Tokenizer tokens: " << endl;
        		BOOST_FOREACH(string t, tempTokens) {
-        	        //cout << t << " ";
 			temp.push_back(t);
 	        }
 
 		Base* element = new Command(temp);
-		//executables.push_back(element);
 		element->exec();
-		//userCommands.clear();
-		//temp.clear();
 	}
 	else {
-		//create the array of commands
+		//create the array of command objects from the command strings
 		vector <string> tempCommand;
 		string s = "";
 		for(unsigned int i = 0; i < userCommands.size(); i++) {
@@ -114,59 +104,40 @@ void Rshell::parse() {
 			commands.push_back(baseTemp);
 			tempCommand.clear();
                 }
-		//for(int i = 0; i < commands.size(); i++) {
-		//	commands.at(i)->exec();
-		//}
+
+		//the first command always executes, and is used in composite
+		//object creation
 		bool firstRun = commands.at(0)->exec();
+	
+		//create our vector of composites
 		for(unsigned int i = 0; i < userComposites.size(); i++) {
                         s = userComposites.at(i);
                         if(s == "&&") {
-				Base* baseTemp = new AndComposite(firstRun, commands.at(i+1));
+				Base* baseTemp = new AndComposite(firstRun,
+				commands.at(i+1));
 				composites.push_back(baseTemp);
 			}
 			else if(s == "||") {
-				Base* baseTemp = new OrComposite(firstRun, commands.at(i+1));
+				Base* baseTemp = new OrComposite(firstRun, 
+				commands.at(i+1));
 				composites.push_back(baseTemp);
 			}
 			else {
-				Base* baseTemp = new SemiColonComposite(firstRun, commands.at(i+1));
+				Base* baseTemp = new SemiColonComposite(firstRun,
+				commands.at(i+1));
 				composites.push_back(baseTemp);
 			}
                         tempCommand.clear();
                 }
+		//now just execute our vector of composite objects
 		for(unsigned int i = 0; i < composites.size(); i++) {
 			composites.at(i)->exec();
 		}
 	}
+	//lastly we clear our vectors for the next run
 	userTokens.clear();
 	userComposites.clear();
 	userCommands.clear();
 	commands.clear();
 	composites.clear();	
-	//command.print();
-	//Base* executable = new Command(command);
-	
-	//We will localise the following in our exec() member of Command
-	/*
-	pid_t pID = fork();
-	if(pID == 0) { //child
-		cout << "Child Process " << endl;
-			
-		//execvp usage requires a const_cast<char*> of a cstr for arg1
-		//and a char* array with the const_cast<char*> cstr and following arguments
-
-		//this will call execvp on our command
-		for(int i = 0; i < i.size(); i++) {
-			executables.at(i)->exec();
-		}
-	}
-	else if(pID < 0) {
-		cout << "Fork failure" << endl;
-		exit(1);
-	}
-	else {	//parent
-		//waitPID(); << Need help implemeting this to wait for child to finish
-		cout << "Parent does nothing" << endl;
-	}
-	*/
 }
