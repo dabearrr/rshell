@@ -67,7 +67,7 @@ bool Command::exec() {
 		}
 		cout << endl;
 
-		cout << "Parent does nothing here" << endl;
+		cout << "Parent does nothing here and child process terminates woohoo! " << endl;
 	}
 	
 	//assuming it executed correctly
