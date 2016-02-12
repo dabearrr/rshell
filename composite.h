@@ -11,8 +11,8 @@ class Composite : public Base
 	Base* secondCommand;
 
         public:
-        Composite(bool a, Base* b) { firstCommand = a; secondCommand = b; }
-	bool exec();
+        //Composite(bool a, Base* b) { firstCommand = a; secondCommand = b; }
+	//bool exec();
         //void print();
 };
 

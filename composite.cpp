@@ -1,5 +1,5 @@
 #include "composite.h"
 
-bool Composite::exec() {
+//bool Composite::exec() {
 	//do exec stuff
-}
+//}
