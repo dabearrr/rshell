@@ -40,9 +40,10 @@ bool Command::exec() {
 	for(int i = 0; i <args.size(); i++) {
 		temp.push_back(const_cast<char*>(args.at(i).c_str()));
 	}
+
 	temp.push_back(NULL);
 	char** argArray = &temp[0];
-	
+	int status;
 	pid_t pID = fork();
 	if(pID == 0) { //child
 		cout << "Child Process here calling EXECVP" << endl;
@@ -50,29 +51,43 @@ bool Command::exec() {
 		//execvp usage requires a const_cast<char*> of a cstr for arg1
 		//and a char* array with the const_cast<char*> cstr and following arguments
 
-		//this will call execvp on our command
-		execvp(argArray[0], argArray);
-	}
+		//this will call execvp on our command	
+	 execvp(argArray[0], argArray);
+		
+	exit(127);
+	}	
 	else if(pID < 0) {
 		cout << "Fork failure" << endl;
 		exit(1);
 	}
+
+		
 	else {	//parent
-		int status;
+		
 		wait(&status);
-		if(status == -1)
+		if(WIFEXITED(status)){
+	        	if(WEXITSTATUS(status) == 0)
+			{
+				//program works
+				return true;	
+			}
+			else
+			{
+				//program failed
+				return false;
+			}	
+	}	
+		else
 		{
-			cout << "There was an error with wait()!! ";
-			exit(1);
-		}
+			return false;}
+
 		cout << endl;
 
 		cout << "Parent does nothing here and child process terminates woohoo! " << endl;
 	}
 	
 	//assuming it executed correctly
-	data = true;
-	return true;
+	return false;
 }
 void Command::rearg(vector <string> &v) {
 	args.clear();
