@@ -1,4 +1,6 @@
 #include "command.h"
+#include <sys/wait.h>
+
 Command::Command() {
 	//nothing?
 }
@@ -56,7 +58,15 @@ bool Command::exec() {
 		exit(1);
 	}
 	else {	//parent
-		//waitPID(); << Need help implemeting this to wait for child to finish
+		int status;
+		wait(&status);
+		if(status == -1)
+		{
+			cout << "There was an error with wait()!! ";
+			exit(1);
+		}
+		cout << endl;
+
 		cout << "Parent does nothing here" << endl;
 	}
 	
