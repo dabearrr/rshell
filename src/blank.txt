@@ -1,3 +1,0 @@
-put all source code in this directory at the end
-
-not including README and MAKEFILE etc
