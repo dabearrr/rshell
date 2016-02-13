@@ -20,6 +20,12 @@ echo "testing #ls , should do nothing!"
 #ls
 echo "Ls not displayed successful!"
 
+echo "Test #5"
+echo "Testing ls; date #cal : this should output ls and date and no cal"
+ls; date #cal
 
+echo "Test #6"
+echo "testing #ls #ls ; date"
+# ls # ls ; date
 
 

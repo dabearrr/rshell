@@ -29,5 +29,16 @@ echo "Test #7"
 echo "Executing single command: ls - lR"
 ls -lR
  
+echo "Test #8"
+echo "Testing single command: git status"
+git status
+
+echo "Test #9"
+echo "Testing single command: uname"
+uname
+
+echo "Test #10"
+echo "Testing single command: hostname"
+hostname
 
 
