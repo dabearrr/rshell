@@ -10,7 +10,7 @@ class SemiColonComposite : public Composite
         }
 };
 
-#endif //SEMICOMLONCOMPOSITE_H
+#endif //SEMICOLONCOMPOSITE_H
 
 
 

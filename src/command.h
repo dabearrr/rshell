@@ -3,6 +3,13 @@
 #define COMMAND_H
 
 #include "base.h"
+#include <sys/wait.h>
+#include <errno.h>
+#include <cstdio>
+#include <stdio.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 
 class Command : public Base
 {

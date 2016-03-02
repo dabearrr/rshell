@@ -1,6 +1,18 @@
 #include "rshell.h"
 using namespace std;
 using namespace boost;
+
+void testBrackets(string &s) {
+	string tempTest = "test ";
+	while(s.find('[') != string::npos) {
+		int tmpPos = s.find('[');
+		s.erase(tmpPos, 1);
+		s.insert(tmpPos, tempTest);
+		tmpPos = s.find(']');
+		s.erase(tmpPos, 1);
+	}
+}
+
 Rshell::Rshell() {
 	//constructor will find the username and hostname
 	userInput = "not written to yet*";
@@ -33,6 +45,48 @@ void Rshell::parse() {
 	
 	//remove comments
 	userInput = userInput.substr(0, userInput.find('#', 0));
+	
+	//Bracket handling to rewrite as test
+	int openBrackets = 0;
+	int closedBrackets = 0;
+	int openParenthesis = 0;
+	int closedParenthesis = 0;
+
+	//for brackets, cannot be nested
+	bool seenOpen = false;
+
+	for(unsigned int i = 0; i < userInput.size(); i++) {
+		char temp = userInput.at(i);
+		if(temp == '[') {
+			openBrackets++;
+			if(seenOpen) {
+				cout << "Error: Another Open Bracket b4 closed";
+				cout << endl;
+				return;
+			}
+			seenOpen = true;
+		}
+		else if(temp == ']') {
+			closedBrackets++;
+			seenOpen = false;
+		}
+		else if(temp == '(') {
+			openParenthesis++;
+		}
+		else if (temp == ')') {
+			closedParenthesis++;
+		}
+	}
+	if(openBrackets != closedBrackets) {
+		cout << "Error: Not enough brackets (unequal)" << endl;
+		return;
+	}
+	
+	if(openParenthesis != closedParenthesis) {
+		cout << "Error: unequal amt of closed/open parenthesis\n";
+		return;
+	}
+	testBrackets(userInput);
 	
 	//boost lib usages
 	//we want to sepate the input into tokens
