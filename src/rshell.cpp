@@ -26,8 +26,7 @@ void Rshell::terminal() {
 		parse();
 	}
 }
-//PREPARE YOURSELF, A LOT OF JANK IS BELOW
-//YOU GOT THIS DUDE
+
 void Rshell::parse() {
 	//take in input
 	getline(cin, userInput);
