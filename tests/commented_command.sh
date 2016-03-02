@@ -28,4 +28,29 @@ echo "Test #6"
 echo "testing #ls #ls ; date"
 # ls # ls ; date
 
+echo "-------------------------------------------------"
+echo "Test #7"
+echo "Testing: test -e /test/file/path # ls"
+test -e /test/file/path # ls
+echo "-------------------------------------------------"
+
+echo "Test #8"
+echo "Testing: # test -e /test/file/path # ls"
+# test -e /test/file/path # ls
+echo "-------------------------------------------------"
+
+echo "Test #9"
+echo "Testing: test -e /test/file/path # ls"
+test -e /test/file/path # ls
+echo "-------------------------------------------------"
+
+echo "Test #10"
+echo "Testing: [ -e /test/file/path ] # ls "
+[ -e /test/file/path ] # ls 
+echo "-------------------------------------------------"
+
+echo "Test #11"
+echo "Testing: # [ -e /test/file/path ] # ls"
+# [ -e /test/file/path ] # ls
+echo "-------------------------------------------------"
 
