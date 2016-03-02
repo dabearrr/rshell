@@ -15,12 +15,85 @@ bool Command::exec() {
 	//test command handling
 	//CONSIDER MOVING TO CHILD PROCESS
 	if(args.at(0) == "test") {
-		//ok lets do this lel
+		// Test Command Implementation
+		//buf struct used to extract information about the given path
+		//flag will hold our flag for test, if none given, then it is -e
 		struct stat buf;
-		stat("myfile.txt", &buf);
-		cout << "ST Mode : " << buf.st_mode << endl;
-		return true;
+		string flag = "";
+
+		//bools are used for our tests to hold if the path is the flag
+		bool isDir = false;
+		bool isReg = false;
+		bool exists = false;
+
+		//first check if a flag was specified
+		//if it was, then our path will be in index 2, else 1
+		//also checks for too many args
+		if(args.size() == 2) {
+			stat(const_cast<char*>(args.at(1).c_str()), &buf);
+			flag = "-e";
+		}
+		else if(args.size() == 3) {
+			stat(const_cast<char*>(args.at(2).c_str()), &buf);
+			flag = args.at(1);
+		}
+		else {
+			cout << "Error: Too many args for test!" << endl;
+			return false;
+		}
+		
+		//macros areused to determine if the path is a file or dir
+		if(S_ISDIR(buf.st_mode)) {
+			isDir = true;
+		}
+		if(S_ISREG(buf.st_mode)) {
+			isReg = true;
+		}
+		if(isReg || isDir) {
+			exists = true;
+		}
+
+		//test based on flag specified
+		if(flag == "-e") {
+			if(exists) {
+				cout << "(True)" << endl;
+				return true;
+			}
+			else {
+				cout << "(False)" << endl;
+				return false;
+			}
+		}
+		else if(flag == "-f") {
+			if(isReg) {
+				cout << "(True)" << endl;
+				return true;
+			}
+			else {
+				cout << "(False)" << endl;
+				return false;
+			}
+		}
+		else if(flag == "-d") {
+			if(isDir) {
+				cout << "(True)" << endl;
+				return true;
+			}
+			else {
+				cout << "(False)" << endl;
+				return false;
+			}
+		}
+		else {
+			cout << "Error: Incorrect flag specified" << endl;
+			return false;
+		}
+		
+		//just in case error handling should never happen
+		cout << "Error: Drastic Test Failure" << endl;
+		return false;
 	}
+	
 	//we want to convert our vector of strings to an array of char*s
 	//we use a neat little trick here, we create an vector of char*s
 	//then, we convert each string from our orignal vector in cstrs
