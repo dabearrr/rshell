@@ -50,7 +50,12 @@ void Rshell::parse() {
 	//Bracket handling to rewrite as test
 	int openBrackets = 0;
 	int closedBrackets = 0;
+	int openParenthesis = 0;
+	int closedParenthesis = 0;
+
+	//for brackets, cannot be nested
 	bool seenOpen = false;
+
 	for(unsigned int i = 0; i < userInput.size(); i++) {
 		char temp = userInput.at(i);
 		if(temp == '[') {
@@ -66,9 +71,20 @@ void Rshell::parse() {
 			closedBrackets++;
 			seenOpen = false;
 		}
+		else if(temp == '(') {
+			openParenthesis++;
+		}
+		else if (temp == ')') {
+			closedParenthesis++;
+		}
 	}
 	if(openBrackets != closedBrackets) {
 		cout << "Error: Not enough brackets (unequal)" << endl;
+		return;
+	}
+	
+	if(openParenthesis != closedParenthesis) {
+		cout << "Error: unequal amt of closed/open parenthesis\n";
 		return;
 	}
 	testBrackets(userInput);
