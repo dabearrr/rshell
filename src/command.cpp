@@ -1,7 +1,4 @@
 #include "command.h"
-#include <sys/wait.h>
-#include <errno.h>
-#include <cstdio>
 
 Command::Command(){}
 
@@ -10,8 +7,19 @@ Command::Command(vector <string> &v) {
 }
 
 bool Command::exec() {	
+	//exit command handling
 	if(args.at(0) == "exit") {
 		exit(1);
+	}
+	
+	//test command handling
+	//CONSIDER MOVING TO CHILD PROCESS
+	if(args.at(0) == "test") {
+		//ok lets do this lel
+		struct stat buf;
+		stat("myfile.txt", &buf);
+		cout << "ST Mode : " << buf.st_mode << endl;
+		return true;
 	}
 	//we want to convert our vector of strings to an array of char*s
 	//we use a neat little trick here, we create an vector of char*s
