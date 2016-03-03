@@ -109,6 +109,7 @@ void Rshell::parse() {
 				temp.push_back(userInput.at(j));
 			}
 			parenStack.push(temp);
+			temp.clear();
 		}
 		else
 		{
