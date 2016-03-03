@@ -97,21 +97,31 @@ void Rshell::parse() {
 	//
 	//
 
-	stack <char> parenStack;
-	for(unsigned int j = 0; j < userInput.size(); j++)
+	stack <string> parenStack;
+	string temp = "";
+	unsigned int j = 0;
+	for(j=j; j < userInput.size(); j++)
 	{
 		char parenCheck = userInput.at(j); 
-		if(parenCheck == '(' || parenCheck == ')')
-		{
-			parenStack.push(j);
+		if(parenCheck == '(')
+		{	while(userInput.at(j) != ')')
+			{	j++;
+				temp.push_back(userInput.at(j));
+			}
+			parenStack.push(temp);
 		}
+		else
+		{
+			//do normal commands without parenthesis
+		}
+						
 	}	
 
 	//
-	////
 	//
 	//
 	//
+	
 
 	//boost lib usages
 	//we want to sepate the input into tokens
