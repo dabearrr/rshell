@@ -1,4 +1,5 @@
 #include "rshell.h"
+#include <stack>
 using namespace std;
 using namespace boost;
 
@@ -88,6 +89,30 @@ void Rshell::parse() {
 	}
 	testBrackets(userInput);
 	
+
+
+	//new code for parenthesis stack
+	//
+	//
+	//
+	//
+
+	stack <char> parenStack;
+	for(unsigned int j = 0; j < userInput.size(); j++)
+	{
+		char parenCheck = userInput.at(j); 
+		if(parenCheck == '(' || parenCheck == ')')
+		{
+			parenStack.push(j);
+		}
+	}	
+
+	//
+	////
+	//
+	//
+	//
+
 	//boost lib usages
 	//we want to sepate the input into tokens
 	char_separator<char> sep(" ");

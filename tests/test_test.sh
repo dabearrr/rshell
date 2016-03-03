@@ -2,7 +2,11 @@
 #tests for the test command
 
 echo "Test #1"
-test -e /test/file/path
+if test -e /test/file/path ; then
+	echo "Yes, found!"
+else
+	echo "Not found!"
+fi
 
 echo "Test #2"
 [ -e /test/file/path ]
