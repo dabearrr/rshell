@@ -9,7 +9,11 @@ else
 fi
 
 echo "Test #2"
-[ -e /test/file/path ]
+if [ -e /test/file/path ] ; then
+	echo "Yes, found!"
+else
+	echo "Not found!"
+fi
 
 echo "Test #3"
 test -f /test/file/path
