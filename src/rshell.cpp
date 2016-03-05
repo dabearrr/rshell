@@ -44,9 +44,30 @@ void Rshell::parse() {
 	//take in input
 	getline(cin, userInput);
 	
+	//chk empty
+	if(userInput == "") {
+		return;
+	}
+	
 	//remove comments
 	userInput = userInput.substr(0, userInput.find('#', 0));
 	
+	string CHKCONNECTORINIT = userInput.substr(0, 2);
+	if(CHKCONNECTORINIT == "&&" || CHKCONNECTORINIT == "||" 
+	|| CHKCONNECTORINIT == "; " || CHKCONNECTORINIT == ";;") {
+		return;
+	} 
+	//cout << CHKCONNECTORINIT << endl;
+	//return;
+	
+	//space out those dumb semicolons t.t
+	for(unsigned int i = 0; i < userInput.size(); i++) {
+		char temp = userInput.at(i);
+		if(temp == ';') {
+			userInput.insert(i, " ");
+			i+= 2;
+		}
+	}
 	//Bracket handling to rewrite as test
 	int openBrackets = 0;
 	int closedBrackets = 0;
@@ -97,7 +118,7 @@ void Rshell::parse() {
 	//
 	//
 
-	stack <string> parenStack;
+	/*stack <string> parenStack;
 	string temp = "";
 	unsigned int j = 0;
 	for(j=j; j < userInput.size(); j++)
@@ -116,7 +137,7 @@ void Rshell::parse() {
 			//do normal commands without parenthesis
 		}
 						
-	}	
+	}*/	
 
 	//
 	//
@@ -166,6 +187,12 @@ void Rshell::parse() {
 		userCommands.push_back(str);
 		str = "";
 	}
+
+	//chk if to manny connectors
+	if(userComposites.size() >= userCommands.size()) {
+		return;
+	}
+	
 	//used to execute singular commands
 	//simply makes a base* to a command object and executes it
 	if(userComposites.empty()) {
