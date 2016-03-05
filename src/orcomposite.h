@@ -7,11 +7,19 @@ class OrComposite : public Composite
         OrComposite(bool a, Base* b) { firstCommand = a; secondCommand = b; }
         bool exec() {
                 if(!firstCommand) {
-                        return secondCommand->exec();
+                        bool TempBoolean = secondCommand->exec();
+			if(TempBoolean) {
+				executedTruely = true;
+			}
+			else {
+				executedTruely = false;
+			}
                 }
                 else {
-                        return false;
+                        //return false;
+			executedTruely = true;
                 }
+		return executedTruely;
         }
 };
 

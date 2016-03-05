@@ -6,7 +6,13 @@ Command::Command(vector <string> &v) {
 	args = v;
 }
 
-bool Command::exec() {	
+bool Command::exec() {
+	if(args.at(0) == "true") {
+		return true;
+	}
+	if(args.at(0) == "false") {
+		return false;
+	}
 	//exit command handling
 	if(args.at(0) == "exit") {
 		exit(1);

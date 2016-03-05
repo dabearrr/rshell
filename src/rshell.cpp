@@ -40,13 +40,13 @@ void Rshell::terminal() {
 	}
 }
 
-void Rshell::parse() {
-	//take in input
-	getline(cin, userInput);
-	
+bool Rshell::executeString(string execString) {
+	string oldUserInput = userInput;
+	userInput = execString;
+    
 	//chk empty
 	if(userInput == "") {
-		return;
+		return true;
 	}
 	
 	//remove comments
@@ -55,7 +55,7 @@ void Rshell::parse() {
 	string CHKCONNECTORINIT = userInput.substr(0, 2);
 	if(CHKCONNECTORINIT == "&&" || CHKCONNECTORINIT == "||" 
 	|| CHKCONNECTORINIT == "; " || CHKCONNECTORINIT == ";;") {
-		return;
+		return false;
 	} 
 	//cout << CHKCONNECTORINIT << endl;
 	//return;
@@ -84,7 +84,7 @@ void Rshell::parse() {
 			if(seenOpen) {
 				cout << "Error: Another Open Bracket b4 closed";
 				cout << endl;
-				return;
+				return false;
 			}
 			seenOpen = true;
 		}
@@ -101,12 +101,12 @@ void Rshell::parse() {
 	}
 	if(openBrackets != closedBrackets) {
 		cout << "Error: Not enough brackets (unequal)" << endl;
-		return;
+		return false;
 	}
 	
 	if(openParenthesis != closedParenthesis) {
 		cout << "Error: unequal amt of closed/open parenthesis\n";
-		return;
+		return false;
 	}
 	testBrackets(userInput);
 	
@@ -190,11 +190,12 @@ void Rshell::parse() {
 
 	//chk if to manny connectors
 	if(userComposites.size() >= userCommands.size()) {
-		return;
+		return false;
 	}
 	
 	//used to execute singular commands
 	//simply makes a base* to a command object and executes it
+	bool TEMPBOOL = false;
 	if(userComposites.empty()) {
 		string s = userCommands.at(0);
 		vector <string> temp;
@@ -204,7 +205,7 @@ void Rshell::parse() {
 	        }
 
 		Base* element = new Command(temp);
-		element->exec();
+		TEMPBOOL = element->exec();
 	}
 	else {
 		//create the array of command objects from the command strings
@@ -229,17 +230,17 @@ void Rshell::parse() {
 		for(unsigned int i = 0; i < userComposites.size(); i++) {
                         s = userComposites.at(i);
                         if(s == "&&") {
-				Base* baseTemp = new AndComposite(firstRun,
+				Composite* baseTemp = new AndComposite(firstRun,
 				commands.at(i+1));
 				composites.push_back(baseTemp);
 			}
 			else if(s == "||") {
-				Base* baseTemp = new OrComposite(firstRun, 
+				Composite* baseTemp = new OrComposite(firstRun, 
 				commands.at(i+1));
 				composites.push_back(baseTemp);
 			}
 			else {
-				Base* baseTemp = new SemiColonComposite(firstRun,
+				Composite* baseTemp = new SemiColonComposite(firstRun,
 				commands.at(i+1));
 				composites.push_back(baseTemp);
 			}
@@ -249,7 +250,131 @@ void Rshell::parse() {
 		for(unsigned int i = 0; i < composites.size(); i++) {
 			composites.at(i)->exec();
 		}
+		
 	}
+	if(composites.size() > 0) {
+		TEMPBOOL = true;
+		for(unsigned int i = 0; i < composites.size(); i++) {
+			if(composites.at(i)->getExecuted() == true) {
+				TEMPBOOL = false;
+			}
+		}
+	}
+	//lastly we clear our vectors for the next run
+	userTokens.clear();
+	userComposites.clear();
+	userCommands.clear();
+	commands.clear();
+	composites.clear();	
+	userInput = oldUserInput;
+	return TEMPBOOL;
+}
+ 
+void Rshell::parse() {
+	//take in input
+	getline(cin, userInput);
+	
+	//chk empty
+	if(userInput == "") {
+		return;
+	}
+	
+	//remove comments
+	userInput = userInput.substr(0, userInput.find('#', 0));
+	
+	string CHKCONNECTORINIT = userInput.substr(0, 2);
+	if(CHKCONNECTORINIT == "&&" || CHKCONNECTORINIT == "||" 
+	|| CHKCONNECTORINIT == "; " || CHKCONNECTORINIT == ";;") {
+		return;
+	} 
+	//cout << CHKCONNECTORINIT << endl;
+	//return;
+	
+	//space out those dumb semicolons t.t
+	for(unsigned int i = 0; i < userInput.size(); i++) {
+		char temp = userInput.at(i);
+		if(temp == ';') {
+			userInput.insert(i, " ");
+			i+= 2;
+		}
+	}
+	//Bracket handling to rewrite as test
+	int openBrackets = 0;
+	int closedBrackets = 0;
+	int openParenthesis = 0;
+	int closedParenthesis = 0;
+
+	//for brackets, cannot be nested
+	bool seenOpen = false;
+
+	for(unsigned int i = 0; i < userInput.size(); i++) {
+		char temp = userInput.at(i);
+		if(temp == '[') {
+			openBrackets++;
+			if(seenOpen) {
+				cout << "Error: Another Open Bracket b4 closed";
+				cout << endl;
+				return;
+			}
+			seenOpen = true;
+		}
+		else if(temp == ']') {
+			closedBrackets++;
+			seenOpen = false;
+		}
+		else if(temp == '(') {
+			openParenthesis++;
+		}
+		else if (temp == ')') {
+			closedParenthesis++;
+		}
+	}
+	if(openBrackets != closedBrackets) {
+		cout << "Error: Not enough brackets (unequal)" << endl;
+		return;
+	}
+	
+	if(openParenthesis != closedParenthesis) {
+		cout << "Error: unequal amt of closed/open parenthesis\n";
+		return;
+	}
+	testBrackets(userInput);
+	
+	executeString(userInput);
+
+
+	//new code for parenthesis stack
+	//
+	//
+	//
+	//
+
+	/*stack <string> parenStack;
+	string temp = "";
+	unsigned int j = 0;
+	for(j=j; j < userInput.size(); j++)
+	{
+		char parenCheck = userInput.at(j); 
+		if(parenCheck == '(')
+		{	while(userInput.at(j) != ')')
+			{	j++;
+				temp.push_back(userInput.at(j));
+			}
+			parenStack.push(temp);
+			temp.clear();
+		}
+		else
+		{
+			//do normal commands without parenthesis
+		}
+						
+	}*/	
+
+	//
+	//
+	//
+	//
+
 	//lastly we clear our vectors for the next run
 	userTokens.clear();
 	userComposites.clear();
