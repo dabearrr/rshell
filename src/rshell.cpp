@@ -376,6 +376,51 @@ void Rshell::parse() {
 		executeString(userInput);
 	}
 	else {
+		char spaceTemp = ' ';
+		int k = 0;
+		
+		string passBeforeParen = " ";
+		while(spaceTemp != ' ')
+		{
+			spaceTemp = userInput.at(k);
+			k++;
+		}
+		if(spaceTemp != '(')
+		{
+			int counterOp = 0;
+			userInput.insert(0, "(");
+			while((spaceTemp != '&') && (spaceTemp != '|') && (spaceTemp != ';'))
+			{
+				
+				spaceTemp = userInput.at(counterOp);
+				counterOp++;
+			}	
+			userInput.insert(counterOp-1, ")");
+
+		}
+/*
+			passBeforeParen = userInput.substr(spaceTemp,counterOp-1); 
+			bool x = execString(passBeforeParen);
+			
+
+
+			if(x){
+				userInput.replace(0, counterOp-1, "true ");
+			}
+			else
+			{
+				userInput.replace(0, counterOp-1, "false ");
+			}
+                        
+				
+		}	
+*/
+	//putting parenthesis at the front and end of the original string
+	//
+	//
+	//	userInput.insert(0, "(");
+	//	userInput.insert(userInput.size()-1, ")");
+
 		//I WILL NEVER GIVE UP
 		while(userInput.find("(") != string::npos) {
 			int deepOpen = 0;
