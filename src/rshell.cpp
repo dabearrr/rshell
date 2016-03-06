@@ -3,6 +3,98 @@
 using namespace std;
 using namespace boost;
 
+vector<string> divideS(string t, const char* splitter) {
+    char tempS[t.size() + 1];
+    for(unsigned int i = 0; i < t.size(); i++) {
+        tempS[i] = t.at(i);
+    }
+    tempS[t.size() + 1] = '\0';
+	char* c = strtok(tempS, splitter);
+	vector<string> tokens;
+	while(c != NULL) {
+		string k(c);
+		trim(k);
+		tokens.push_back(k);
+		c = strtok(NULL, splitter);
+	}
+	return tokens;
+}
+unsigned int getEPL(string uc, unsigned int loc) {
+    unsigned int l = loc + 1;
+    stack<char> t;
+    t.push('b');
+    char c = ')';
+    char o = '(';
+    for(; l < uc.size(); ++l) {
+        if(uc.at(l) == o) {
+            t.push(o);
+        }
+        else if(com.at(l) == c) {
+            char chk = t.top(); t.pop();
+            if(chk == 'b' && t.empty()) {
+                return l;
+            }
+        }
+    }
+    return l;
+}
+
+string rP(string s) {
+    bool recurse = false;
+    stack<char> p;
+    
+    do {
+        trim(s);
+        bool noP = s.find('(') != 0;
+        bool noPEnd = getEPL(s, 0) != s.size() - 1;
+        if(noP) {
+            return s;
+        }
+        else if(noPEnd) {
+            s.erase(0, 1);
+            s.erase(s.size()-1);
+            bool continueloop = getEPL(s, 0) == s.size() - 1;
+            if(continueloop) {
+                recurse = true;
+            }
+            else {
+                return s;
+            }
+        }
+        else {
+            return s;
+        }
+    } while(recurse);
+    return s;
+}
+
+class Super : public Base
+{
+    protected:
+    bool deeper;
+    vector<bool> didExec;
+    string ui;
+    
+    public:
+    Super(string s) { ui = s; }
+    bool exec() {
+        trim(ui);
+        ui = rP(ui);
+        
+        if(ui == "") { return true; }
+        deeper = false;
+        for(unsigned int q = 0; q < ui.size(); q++) {
+            char o = '(';
+            bool d = ui.at(q) == o;
+            if(d) { deeper = true; }
+        }
+        
+        if(deeper == true) {
+            
+        }
+    }
+}
+
 void testBrackets(string &s) {
 	string tempTest = "test ";
 	while(s.find('[') != string::npos) {
@@ -45,6 +137,18 @@ string isolateDeep(string s, int &begin, int &end) {
 	//cout << begin << " " << end << " " << tempS << endl;
 	//cout << s.at(end) << endl;
 	return tempS;
+}
+	
+vector<string> divideS(string t, const char* splitter) {
+	char* c = strtok(t.c_str(), splitter);
+	vector<string> tokens;
+	while(c != NULL) {
+		string k(c);
+		trim(k);
+		tokens.push_back(k);
+		c = strtok(NULL, splitter);
+	}
+	return tokens;
 }
 	
 Rshell::Rshell() {
