@@ -44,15 +44,15 @@ string rP(string s) {
     
     do {
         trim(s);
-        bool noP = s.find('(') != 0;
-        bool noPEnd = getEPL(s, 0) != s.size() - 1;
+        bool noP = (s.find('(') != 0);
+        bool noPEnd = (getEPL(s, 0) == s.size() - 1);
         if(noP) {
             return s;
         }
         else if(noPEnd) {
             s.erase(0, 1);
             s.erase(s.size()-1);
-            bool continueloop = getEPL(s, 0) == s.size() - 1;
+            bool continueloop = (getEPL(s, 0) == s.size() - 1);
             if(continueloop) {
                 recurse = true;
             }
