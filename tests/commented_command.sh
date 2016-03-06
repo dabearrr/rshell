@@ -54,3 +54,30 @@ echo "Testing: # [ -e /test/file/path ] # ls"
 # [ -e /test/file/path ] # ls
 echo "-------------------------------------------------"
 
+echo "Test #12"
+echo "Testing: echo a && (echo B && echo c) #date"
+echo a && (echo B && echo c) #date
+
+echo "Test #13"
+echo "Testing: # echo a && (echo B && echo c) #date "
+# echo a && (echo B && echo c) #date
+
+echo "Test #14"
+echo "Testing: echo a #ls && (echo B && echo c) #date"
+echo a #ls && (echo B && echo c) #date
+
+echo "Test #15"
+echo "Testing: echo a && (echo B && echo c) #ls"
+echo a && (echo B && echo c) #ls
+
+echo "Test #16"
+echo "Testing: echo a && (echo B && echo c) #date "
+echo a && (echo B && echo c) #date
+
+echo "Test #17"
+echo "Testing: echo a && (echo B) #ls && echo c) #date"
+echo a && (echo B) #ls && echo c) #date
+
+echo "Test #18"
+echo "Testing: #clear echo a && (echo B && echo c) #date "
+#clear echo a && (echo B && echo c) #date
