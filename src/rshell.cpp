@@ -3,6 +3,7 @@
 using namespace std;
 using namespace boost;
 
+//divides the original string
 vector<string> divideS(string t, const char* splitter) {
     char* tempS = new char[t.size() + 1];
     strcpy(tempS, t.c_str());
@@ -18,6 +19,7 @@ vector<string> divideS(string t, const char* splitter) {
 	}
 	return tokens;
 }
+//gets the end parenthesis length away from original spot
 unsigned int getEPL(string uc, unsigned int loc) {
     unsigned int l = loc + 1;
     stack<char> t;
@@ -38,6 +40,7 @@ unsigned int getEPL(string uc, unsigned int loc) {
     return l;
 }
 
+//looks for beginning parenthesis
 string rP(string s) {
     bool recurse = false;
     stack<char> p;
@@ -67,7 +70,7 @@ string rP(string s) {
     return s;
 }
 
-
+//implements bracket operators for test command
 void testBrackets(string &s) {
 	string tempTest = "test ";
 	while(s.find('[') != string::npos) {
@@ -78,7 +81,7 @@ void testBrackets(string &s) {
 		s.erase(tmpPos, 1);
 	}
 }
-
+//finds deepest parenthesis with highest precedence
 int deepestPar(string s) {
 	int tempIndex = -1;
 	for(unsigned int i = 0; i < s.size(); i++) {
@@ -89,7 +92,7 @@ int deepestPar(string s) {
 	}
 	return tempIndex;
 }
-
+//isolates the deepest parenthesis that has highest precedence
 string isolateDeep(string s, int &begin, int &end) {
 	char tempChar = 'd';
 	unsigned int i = 0 ;
@@ -111,7 +114,7 @@ string isolateDeep(string s, int &begin, int &end) {
 	//cout << s.at(end) << endl;
 	return tempS;
 }
-
+//filters out the parenthesis to get string command
 void filterP(string uc) {
 	stack<char> t;
 	for(unsigned int r = 0; r < uc.size(); r++) {
@@ -135,7 +138,7 @@ void filterP(string uc) {
 }
 
 
-
+//new class super that will handle parenthesis and precedence operators within commands
 class Super : public Base
 {
     protected:
@@ -175,6 +178,7 @@ class Super : public Base
         		bool chk1 = ui.at(r) == O; bool chk2 = ui.at(r) == A; 
         		bool chk3 = ui.at(r) == OR; bool chk4 = ui.at(r) == S;
         		bool chk5 = ui.at(r) == SP;
+			//begin checking parenthesis 
         		if(chk1) {
         			beginSuper = r;
         			endSuper = getEPL(ui, r);
@@ -228,10 +232,10 @@ class Super : public Base
         			supers.push_back(superHold);
         		}
         	}
-        	//WHILE END
+        	//WHILE loop ends right here
         	Base* initCommand = new Super(supers.at(0));
         	bool resultF = initCommand->exec();
-        	
+        	//iterate through our composites
         	for(unsigned int q = 0; q < comps.size(); q++) {
         		Base* consec;
         		bool andCreate = comps.at(q) == "&&";
@@ -272,7 +276,7 @@ class Super : public Base
         	Base* initLeaf = new Command(initExec);
         	bool initialize = initLeaf->exec();
         	didExec.push_back(initialize);
-        	
+        	//for loop for parenthesis and composites - creating new objects
         	for(unsigned int r = 0; r < comps.size(); ++r) {
         		Base* consec;
         		
