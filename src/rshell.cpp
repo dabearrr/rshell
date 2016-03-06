@@ -288,7 +288,7 @@ bool Rshell::executeString(string execString) {
 	if(composites.size() > 0) {
 		TEMPBOOL = true;
 		for(unsigned int i = 0; i < composites.size(); i++) {
-			if(composites.at(i)->getExecuted() == true) {
+			if(composites.at(i)->getExecuted() == false) {
 				TEMPBOOL = false;
 			}
 		}
