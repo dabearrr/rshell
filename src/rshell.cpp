@@ -6,7 +6,7 @@ using namespace boost;
 vector<string> divideS(string t, const char* splitter) {
     char* tempS = new char[t.size() + 1];
     strcpy(tempS, t.c_str());
-    tempS[t.size() + 1] = '\0';
+    tempS[t.size()] = '\0';
     char* c;
 	c = strtok(tempS, splitter);
 	vector<string> tokens;
@@ -111,7 +111,30 @@ string isolateDeep(string s, int &begin, int &end) {
 	//cout << s.at(end) << endl;
 	return tempS;
 }
-	
+
+void filterP(string uc) {
+	stack<char> t;
+	for(unsigned int r = 0; r < uc.size(); r++) {
+		if(uc.at(r) == '(') {
+			t.push('(');
+		}
+		else if(uc.at(r) == ')') {
+			if(t.empty()) {
+				t.pop();
+			}
+			else {
+				cout << "Not enough open Parenthesis" << endl;
+				exit(0);
+			}
+		}
+	}
+	if(!t.empty()) {
+		cout << "Not enough closing parenthesis" << endl;
+		exit(0);
+	}
+}
+
+
 
 class Super : public Base
 {
@@ -577,6 +600,9 @@ void Rshell::parse() {
 	trim(userInput);
 	
 	//We create our main super to run
+	//userInput.insert(0, "(");
+	//userInput.insert(userInput.size() - 1, ")");
+	filterP(userInput);
 	Base* SuperExecutable = new Super(userInput);
 	SuperExecutable->exec();
 
