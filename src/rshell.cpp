@@ -575,14 +575,11 @@ void Rshell::parse() {
 	}
 	testBrackets(userInput);
 	trim(userInput);
-	//if(openParenthesis == 0) {
-	//	executeString(userInput);
-	//}
-	//else {
-		Base* SuperExecutable = new Super(userInput);
-		cout << "attempt run" << endl;
-		SuperExecutable->exec();
-	//}
+	
+	//We create our main super to run
+	Base* SuperExecutable = new Super(userInput);
+	SuperExecutable->exec();
+
 	//lastly we clear our vectors for the next run
 	userTokens.clear();
 	userComposites.clear();
