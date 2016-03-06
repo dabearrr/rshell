@@ -14,6 +14,39 @@ void testBrackets(string &s) {
 	}
 }
 
+int deepestPar(string s) {
+	int tempIndex = -1;
+	for(unsigned int i = 0; i < s.size(); i++) {
+		char tempC = s.at(i);
+		if(tempC == '(') {
+			tempIndex = i;
+		}
+	}
+	return tempIndex;
+}
+
+string isolateDeep(string s, int &begin, int &end) {
+	char tempChar = 'd';
+	unsigned int i = 0 ;
+	unsigned int lastParSeen = 999;
+	while(i < s.size() && tempChar != ')') {
+		tempChar = s.at(i);
+		if(tempChar == '(') {
+			lastParSeen = i;
+		}
+		if(tempChar == ')') {
+			break;
+		}
+		i++;	
+	}
+	begin = lastParSeen;
+	end = i;
+	string tempS = s.substr(begin, (end - begin) + 1);
+	//cout << begin << " " << end << " " << tempS << endl;
+	//cout << s.at(end) << endl;
+	return tempS;
+}
+	
 Rshell::Rshell() {
 	//constructor will find the username and hostname
 	userInput = "not written to yet*";
@@ -339,10 +372,76 @@ void Rshell::parse() {
 		return;
 	}
 	testBrackets(userInput);
+	if(openParenthesis == 0) {
+		executeString(userInput);
+	}
+	else {
+		//I WILL NEVER GIVE UP
+		while(userInput.find("(") != string::npos) {
+			int deepOpen = 0;
+			int deepClosed = 0;
+			bool execTrue = true;
+			string execString = "";
+			execString = isolateDeep(userInput, deepOpen, deepClosed);
+			//cout << "****" << execString << "*****" << endl;
+			//execString = execString.substr(1, execString.size() - 2);
+			//cout << "****" << execString << "*****" << endl;
+			
+			int prevOpen = -1;
+			int nextClosed = -1;
+			for(int i = deepOpen - 1; i >= 0; i--) {
+				char tempC = userInput.at(i);
+				if(tempC == '(') {
+					prevOpen = i;
+					break;
+				}
+			}
+			if(prevOpen != -1 && (execString.find("||") == string::npos && execString.find("&&")
+			 == string::npos && execString.find(";") == string::npos) ) {
+			bool seen = true;
+			for(int i = deepClosed + 2; i < static_cast<int>(userInput.size()); i++) {
+				char tempC = userInput.at(i);
+				if(tempC == '(') {
+					seen = false;
+				}
+				if(tempC == ')') {
+					if(seen) {
+						nextClosed = i;
+						break;
+					}
+					seen = true; 
+				}
+			}
+			string execString2 = userInput.substr(prevOpen, (nextClosed - prevOpen) + 1);
+			cout << "*******" << execString2 << "********" <<  endl;
+			cout << "Executing: " << execString2 << endl;
+			
+			if(execTrue) {
+				userInput.replace(prevOpen, (nextClosed - prevOpen) + 1, "true ");
+			}
+			else {
+				userInput.replace(prevOpen, (nextClosed - prevOpen) + 1, "true ");
+			}
+			}
+			else {
+			//execute execString
+			//assign exectrue to it's value
+			cout << "Executing: " << execString << endl;
+			
+			if(execTrue) {
+				userInput.replace(deepOpen, (deepClosed - deepOpen) + 1, "true ");
+			}
+			else {
+				userInput.replace(deepOpen, (deepClosed - deepOpen) + 1, "false ");
+			}
+			}
+			cout << "Input is now: " << userInput << endl;
+			
+		}
+		return;
+	}
 	
-	executeString(userInput);
-
-
+	
 	//new code for parenthesis stack
 	//
 	//
