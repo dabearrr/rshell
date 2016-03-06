@@ -119,7 +119,7 @@ void filterP(string uc) {
 			t.push('(');
 		}
 		else if(uc.at(r) == ')') {
-			if(t.empty()) {
+			if(!t.empty()) {
 				t.pop();
 			}
 			else {
@@ -193,9 +193,8 @@ class Super : public Base
         			r += 2;
         		}
         		else if(chk4) {
-        			bool semiChk = ui.at(r + 1) == S;
-        			if(semiChk) { comps.push_back(SemiComp); }
-        			r += 2;
+        			comps.push_back(SemiComp);
+        			r += 1;
         		}
         		else if(chk5) {
         			++r;
@@ -212,7 +211,7 @@ class Super : public Base
         			// bool final = final1 && final2 && final3;
         			 if(ui.find(AndComp, r) == string::npos 
         			 && ui.find(OrComp, r) == string::npos 
-        			 && ui.find(SemiComp, r) ) { 
+        			 && ui.find(SemiComp, r) == string::npos ) { 
         				endSuper = ui.size(); 
         			}
         			else {
@@ -231,39 +230,40 @@ class Super : public Base
         	//WHILE END
         	Base* initCommand = new Super(supers.at(0));
         	bool resultF = initCommand->exec();
-        	
+        	didExec.push_back(resultF);
         	for(unsigned int q = 0; q < comps.size(); q++) {
         		Base* consec;
         		bool andCreate = comps.at(q) == "&&";
-        		bool orCreate = comps.at(q) == "&&";
-        		bool semiCreate = comps.at(q) == "&&";
+        		bool orCreate = comps.at(q) == "||";
+        		bool semiCreate = comps.at(q) == ";";
         		
         		if(andCreate) { consec = new AndComposite(resultF, new Super(supers.at(q + 1))); }
         		else if(orCreate) { consec = new OrComposite(resultF, new Super(supers.at(q + 1))); }
         		else if(semiCreate) { consec = new SemiColonComposite(resultF, new Super(supers.at(q + 1))); }
-        		
-        		return consec->exec();
+        		bool followingS = consec->exec();
+        		didExec.push_back(followingS);
         	}
+		for(unsigned int q = 0; q < didExec.size(); q++) {
+			if(didExec.at(q)) {
+				return true;
+			}
+		}
         }
         else if(!deeper) {
         	testBrackets(ui);
         	for(unsigned int r = 0; r < ui.length(); ++r) {
         		bool chk2 = ui.at(r) == A; bool chk3 = ui.at(r) == OR;
     			bool chk4 = ui.at(r) == S;
-        	    if(chk2) {
+        	    	if(chk2) {
         			bool ampChk = ui.at(r + 1) == A;
         			if(ampChk) { comps.push_back(AndComp); }
-        			r += 2;
         		}
         		else if(chk3) {
         			bool orChk = ui.at(r + 1) == OR;
         			if(orChk) { comps.push_back(OrComp); }
-        			r += 2;
         		}
         		else if(chk4) {
-        			bool semiChk = ui.at(r + 1) == S;
-        			if(semiChk) { comps.push_back(SemiComp); }
-        			r += 2;
+        			comps.push_back(SemiComp);
         		}
         	}
         	vector<string> leafs = divideS(ui, "||&&;");
