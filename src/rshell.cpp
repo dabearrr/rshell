@@ -414,8 +414,10 @@ void Rshell::parse() {
 			}
 			string execString2 = userInput.substr(prevOpen, (nextClosed - prevOpen) + 1);
 			cout << "*******" << execString2 << "********" <<  endl;
+			//execString2 = execString2.substr(1, (execString2.size() - 1) - 1);
+			execString2.erase(0, 1); execString2.erase(execString2.size() - 1, 1);
 			cout << "Executing: " << execString2 << endl;
-			
+			execTrue = executeString(execString2);
 			if(execTrue) {
 				userInput.replace(prevOpen, (nextClosed - prevOpen) + 1, "true ");
 			}
@@ -426,8 +428,9 @@ void Rshell::parse() {
 			else {
 			//execute execString
 			//assign exectrue to it's value
+			execString.erase(0, 1); execString.erase(execString.size() - 1, 1);
 			cout << "Executing: " << execString << endl;
-			
+			execTrue = executeString(execString);
 			if(execTrue) {
 				userInput.replace(deepOpen, (deepClosed - deepOpen) + 1, "true ");
 			}
