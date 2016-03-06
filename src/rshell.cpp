@@ -398,45 +398,45 @@ void Rshell::parse() {
 			}
 			if(prevOpen != -1 && (execString.find("||") == string::npos && execString.find("&&")
 			 == string::npos && execString.find(";") == string::npos) ) {
-			bool seen = true;
-			for(int i = deepClosed + 2; i < static_cast<int>(userInput.size()); i++) {
-				char tempC = userInput.at(i);
-				if(tempC == '(') {
-					seen = false;
-				}
-				if(tempC == ')') {
-					if(seen) {
-						nextClosed = i;
-						break;
+				bool seen = true;
+				for(int i = deepClosed + 2; i < static_cast<int>(userInput.size()); i++) {
+					char tempC = userInput.at(i);
+					if(tempC == '(') {
+						seen = false;
 					}
-					seen = true; 
+					if(tempC == ')') {
+						if(seen) {
+							nextClosed = i;
+							break;
+						}
+						seen = true; 
+					}
+				}
+				string execString2 = userInput.substr(prevOpen, (nextClosed - prevOpen) + 1);
+				cout << "*******" << execString2 << "********" <<  endl;
+				//execString2 = execString2.substr(1, (execString2.size() - 1) - 1);
+				execString2.erase(0, 1); execString2.erase(execString2.size() - 1, 1);
+				cout << "Executing: " << execString2 << endl;
+				execTrue = executeString(execString2);
+				if(execTrue) {
+					userInput.replace(prevOpen, (nextClosed - prevOpen) + 1, "true ");
+				}
+				else {
+					userInput.replace(prevOpen, (nextClosed - prevOpen) + 1, "true ");
 				}
 			}
-			string execString2 = userInput.substr(prevOpen, (nextClosed - prevOpen) + 1);
-			cout << "*******" << execString2 << "********" <<  endl;
-			//execString2 = execString2.substr(1, (execString2.size() - 1) - 1);
-			execString2.erase(0, 1); execString2.erase(execString2.size() - 1, 1);
-			cout << "Executing: " << execString2 << endl;
-			execTrue = executeString(execString2);
-			if(execTrue) {
-				userInput.replace(prevOpen, (nextClosed - prevOpen) + 1, "true ");
-			}
 			else {
-				userInput.replace(prevOpen, (nextClosed - prevOpen) + 1, "true ");
-			}
-			}
-			else {
-			//execute execString
-			//assign exectrue to it's value
-			execString.erase(0, 1); execString.erase(execString.size() - 1, 1);
-			cout << "Executing: " << execString << endl;
-			execTrue = executeString(execString);
-			if(execTrue) {
-				userInput.replace(deepOpen, (deepClosed - deepOpen) + 1, "true ");
-			}
-			else {
-				userInput.replace(deepOpen, (deepClosed - deepOpen) + 1, "false ");
-			}
+				//execute execString
+				//assign exectrue to it's value
+				execString.erase(0, 1); execString.erase(execString.size() - 1, 1);
+				cout << "Executing: " << execString << endl;
+				execTrue = executeString(execString);
+				if(execTrue) {
+					userInput.replace(deepOpen, (deepClosed - deepOpen) + 1, "true ");
+				}
+				else {
+					userInput.replace(deepOpen, (deepClosed - deepOpen) + 1, "false ");
+				}
 			}
 			cout << "Input is now: " << userInput << endl;
 			
