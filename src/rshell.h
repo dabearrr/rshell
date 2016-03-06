@@ -3,12 +3,15 @@
 #define RSHELL_H
 
 #include <stdio.h>
+#include <sys/socket.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <sys/wait.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <iostream>
 #include <string>
+#include <boost/algorithm/string.hpp>
 #include <boost/foreach.hpp>
 #include <boost/tokenizer.hpp>
 #include <boost/scoped_ptr.hpp>

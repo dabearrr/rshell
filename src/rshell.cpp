@@ -4,12 +4,11 @@ using namespace std;
 using namespace boost;
 
 vector<string> divideS(string t, const char* splitter) {
-    char tempS[t.size() + 1];
-    for(unsigned int i = 0; i < t.size(); i++) {
-        tempS[i] = t.at(i);
-    }
+    char* tempS = new char[t.size() + 1];
+    strcpy(tempS, t.c_str());
     tempS[t.size() + 1] = '\0';
-	char* c = strtok(tempS, splitter);
+    char* c;
+	c = strtok(tempS, splitter);
 	vector<string> tokens;
 	while(c != NULL) {
 		string k(c);
@@ -29,7 +28,7 @@ unsigned int getEPL(string uc, unsigned int loc) {
         if(uc.at(l) == o) {
             t.push(o);
         }
-        else if(com.at(l) == c) {
+        else if(uc.at(l) == c) {
             char chk = t.top(); t.pop();
             if(chk == 'b' && t.empty()) {
                 return l;
@@ -68,32 +67,6 @@ string rP(string s) {
     return s;
 }
 
-class Super : public Base
-{
-    protected:
-    bool deeper;
-    vector<bool> didExec;
-    string ui;
-    
-    public:
-    Super(string s) { ui = s; }
-    bool exec() {
-        trim(ui);
-        ui = rP(ui);
-        
-        if(ui == "") { return true; }
-        deeper = false;
-        for(unsigned int q = 0; q < ui.size(); q++) {
-            char o = '(';
-            bool d = ui.at(q) == o;
-            if(d) { deeper = true; }
-        }
-        
-        if(deeper == true) {
-            
-        }
-    }
-}
 
 void testBrackets(string &s) {
 	string tempTest = "test ";
@@ -139,17 +112,176 @@ string isolateDeep(string s, int &begin, int &end) {
 	return tempS;
 }
 	
-vector<string> divideS(string t, const char* splitter) {
-	char* c = strtok(t.c_str(), splitter);
-	vector<string> tokens;
-	while(c != NULL) {
-		string k(c);
-		trim(k);
-		tokens.push_back(k);
-		c = strtok(NULL, splitter);
-	}
-	return tokens;
-}
+
+class Super : public Base
+{
+    protected:
+    vector<string> comps;
+    vector<string> supers;
+    vector<bool> didExec;
+    string ui;
+    unsigned int beginSuper;
+    unsigned int endSuper;
+    unsigned int andLoc, orLoc, semiLoc;
+    int loc1, loc2;
+    bool deeper;
+    
+    public:
+    Super(string s) { ui = s; }
+    bool exec() {
+    	const char O = '('; const char A = '&'; const char OR = '|';
+        const char S = ';'; const char SP = ' ';
+        string AndComp = "&&"; string OrComp = "||";
+        string SemiComp = ";";
+        
+        trim(ui);
+        ui = rP(ui);
+        
+        if(ui == "") { return true; }
+        deeper = false;
+        for(unsigned int q = 0; q < ui.size(); q++) {
+            char o = '(';
+            bool d = ui.at(q) == o;
+            if(d) { deeper = true; }
+        }
+        
+        if(deeper == true) {
+        	string superHold;
+        	unsigned int r = 0; 
+        	while(r < ui.size()) {
+        		bool chk1 = ui.at(r) == O; bool chk2 = ui.at(r) == A; 
+        		bool chk3 = ui.at(r) == OR; bool chk4 = ui.at(r) == S;
+        		bool chk5 = ui.at(r) == SP;
+        		if(chk1) {
+        			beginSuper = r;
+        			endSuper = getEPL(ui, r);
+        			superHold = ui.substr(beginSuper, (endSuper - beginSuper) + 1);
+        			supers.push_back(superHold);
+        			r += (endSuper - beginSuper) + 1;
+        		}
+        		else if(chk2) {
+        			bool ampChk = ui.at(r + 1) == A;
+        			if(ampChk) { comps.push_back(AndComp); }
+        			r += 2;
+        		}
+        		else if(chk3) {
+        			bool orChk = ui.at(r + 1) == OR;
+        			if(orChk) { comps.push_back(OrComp); }
+        			r += 2;
+        		}
+        		else if(chk4) {
+        			bool semiChk = ui.at(r + 1) == S;
+        			if(semiChk) { comps.push_back(SemiComp); }
+        			r += 2;
+        		}
+        		else if(chk5) {
+        			++r;
+        		}
+        		else {
+        			beginSuper = r;
+        			unsigned int andLoc = ui.find(AndComp, r);
+        			unsigned int orLoc = ui.find(OrComp, r);
+        			unsigned int semiLoc = ui.find(SemiComp, r);
+        			
+        			// bool final1 = (andLoc == string::npos);
+        			// bool final2 = (orLoc == string::npos);
+        			// bool final3 = (semiLoc == string::npos);
+        			// bool final = final1 && final2 && final3;
+        			 if(ui.find(AndComp, r) == string::npos 
+        			 && ui.find(OrComp, r) == string::npos 
+        			 && ui.find(SemiComp, r) ) { 
+        				endSuper = ui.size(); 
+        			}
+        			else {
+        				bool alo = andLoc < orLoc; bool als = andLoc < semiLoc;
+        				bool ola = orLoc < andLoc; bool ols = orLoc < semiLoc;
+        				bool sla = semiLoc < andLoc; bool slo = semiLoc < orLoc;
+        				if(alo && als) { endSuper = andLoc - 1; }
+        				else if(ola && ols) { endSuper = orLoc - 1; }
+        				else if(sla && slo) { endSuper = semiLoc - 1; }
+        			}
+        			superHold  = ui.substr(beginSuper, endSuper - beginSuper);
+        			r = r + (endSuper - beginSuper);
+        			supers.push_back(superHold);
+        		}
+        	}
+        	//WHILE END
+        	Base* initCommand = new Super(supers.at(0));
+        	bool resultF = initCommand->exec();
+        	
+        	for(unsigned int q = 0; q < comps.size(); q++) {
+        		Base* consec;
+        		bool andCreate = comps.at(q) == "&&";
+        		bool orCreate = comps.at(q) == "&&";
+        		bool semiCreate = comps.at(q) == "&&";
+        		
+        		if(andCreate) { consec = new AndComposite(resultF, new Super(supers.at(q + 1))); }
+        		else if(orCreate) { consec = new OrComposite(resultF, new Super(supers.at(q + 1))); }
+        		else if(semiCreate) { consec = new SemiColonComposite(resultF, new Super(supers.at(q + 1))); }
+        		
+        		return consec->exec();
+        	}
+        }
+        else if(!deeper) {
+        	testBrackets(ui);
+        	for(unsigned int r = 0; r < ui.length(); ++r) {
+        		bool chk2 = ui.at(r) == A; bool chk3 = ui.at(r) == OR;
+    			bool chk4 = ui.at(r) == S;
+        	    if(chk2) {
+        			bool ampChk = ui.at(r + 1) == A;
+        			if(ampChk) { comps.push_back(AndComp); }
+        			r += 2;
+        		}
+        		else if(chk3) {
+        			bool orChk = ui.at(r + 1) == OR;
+        			if(orChk) { comps.push_back(OrComp); }
+        			r += 2;
+        		}
+        		else if(chk4) {
+        			bool semiChk = ui.at(r + 1) == S;
+        			if(semiChk) { comps.push_back(SemiComp); }
+        			r += 2;
+        		}
+        	}
+        	vector<string> leafs = divideS(ui, "||&&;");
+        	
+        	vector<string> initExec = divideS(leafs.at(0), " ");
+        	Base* initLeaf = new Command(initExec);
+        	bool initialize = initLeaf->exec();
+        	didExec.push_back(initialize);
+        	
+        	for(unsigned int r = 0; r < comps.size(); ++r) {
+        		Base* consec;
+        		
+        		vector<string> parameters = divideS(leafs.at(r + 1), " ");
+        		bool chk1 = comps.at(r) == AndComp;
+        		bool chk2 = comps.at(r) == OrComp;
+        		bool chk3 = comps.at(r) == SemiComp;
+        		if(chk1) {
+        			consec = new AndComposite(initialize, new Command(parameters));
+        		}
+        		else if(chk2) {
+        			consec = new OrComposite(initialize, new Command(parameters));
+        		}
+        		else if(chk3) {
+        			consec = new SemiColonComposite(initialize, new Command(parameters));
+        		}
+        		bool following = consec->exec();
+        		didExec.push_back(following);
+        	}
+        	bool trueSuper = false;
+        	for(unsigned int q = 0; q < didExec.size(); q++) {
+        		if(didExec.at(q)) {
+        			trueSuper = true;
+        		}
+        	}
+        	return trueSuper;
+        }
+        comps.clear();
+        supers.clear();
+        return false;
+    }
+};
 	
 Rshell::Rshell() {
 	//constructor will find the username and hostname
@@ -246,41 +378,7 @@ bool Rshell::executeString(string execString) {
 		return false;
 	}
 	testBrackets(userInput);
-	
 
-
-	//new code for parenthesis stack
-	//
-	//
-	//
-	//
-
-	/*stack <string> parenStack;
-	string temp = "";
-	unsigned int j = 0;
-	for(j=j; j < userInput.size(); j++)
-	{
-		char parenCheck = userInput.at(j); 
-		if(parenCheck == '(')
-		{	while(userInput.at(j) != ')')
-			{	j++;
-				temp.push_back(userInput.at(j));
-			}
-			parenStack.push(temp);
-			temp.clear();
-		}
-		else
-		{
-			//do normal commands without parenthesis
-		}
-						
-	}*/	
-
-	//
-	//
-	//
-	//
-	
 
 	//boost lib usages
 	//we want to sepate the input into tokens
@@ -476,156 +574,14 @@ void Rshell::parse() {
 		return;
 	}
 	testBrackets(userInput);
+	trim(userInput);
 	if(openParenthesis == 0) {
 		executeString(userInput);
 	}
 	else {
-		char spaceTemp = ' ';
-		int k = 0;
-		
-		string passBeforeParen = " ";
-		while(spaceTemp != ' ')
-		{
-			spaceTemp = userInput.at(k);
-			k++;
-		}
-		if(spaceTemp != '(')
-		{
-			int counterOp = 0;
-			userInput.insert(0, "(");
-			while((spaceTemp != '&') && (spaceTemp != '|') && (spaceTemp != ';'))
-			{
-				
-				spaceTemp = userInput.at(counterOp);
-				counterOp++;
-			}	
-			userInput.insert(counterOp-1, ")");
-
-		}
-/*
-			passBeforeParen = userInput.substr(spaceTemp,counterOp-1); 
-			bool x = execString(passBeforeParen);
-			
-
-
-			if(x){
-				userInput.replace(0, counterOp-1, "true ");
-			}
-			else
-			{
-				userInput.replace(0, counterOp-1, "false ");
-			}
-                        
-				
-		}	
-*/
-	//putting parenthesis at the front and end of the original string
-	//
-	//
-	//	userInput.insert(0, "(");
-	//	userInput.insert(userInput.size()-1, ")");
-
-		//I WILL NEVER GIVE UP
-		while(userInput.find("(") != string::npos) {
-			int deepOpen = 0;
-			int deepClosed = 0;
-			bool execTrue = true;
-			string execString = "";
-			execString = isolateDeep(userInput, deepOpen, deepClosed);
-			//cout << "****" << execString << "*****" << endl;
-			//execString = execString.substr(1, execString.size() - 2);
-			//cout << "****" << execString << "*****" << endl;
-			
-			int prevOpen = -1;
-			int nextClosed = -1;
-			for(int i = deepOpen - 1; i >= 0; i--) {
-				char tempC = userInput.at(i);
-				if(tempC == '(') {
-					prevOpen = i;
-					break;
-				}
-			}
-			if(prevOpen != -1 && (execString.find("||") == string::npos && execString.find("&&")
-			== string::npos && execString.find(";") == string::npos) ) {
-				bool seen = true;
-				for(int i = deepClosed + 2; i < static_cast<int>(userInput.size()); i++) {
-					char tempC = userInput.at(i);
-					if(tempC == '(') {
-						seen = false;
-					}
-					if(tempC == ')') {
-						if(seen) {
-							nextClosed = i;
-							break;
-						}
-						seen = true; 
-					}
-				}
-				string execString2 = userInput.substr(prevOpen, (nextClosed - prevOpen) + 1);
-				cout << "*******" << execString2 << "********" <<  endl;
-				//execString2 = execString2.substr(1, (execString2.size() - 1) - 1);
-				execString2.erase(0, 1); execString2.erase(execString2.size() - 1, 1);
-				cout << "Executing: " << execString2 << endl;
-				execTrue = executeString(execString2);
-				if(execTrue) {
-					userInput.replace(prevOpen, (nextClosed - prevOpen) + 1, "true ");
-				}
-				else {
-					userInput.replace(prevOpen, (nextClosed - prevOpen) + 1, "true ");
-				}
-			}
-			else {
-				//execute execString
-				//assign exectrue to it's value
-				execString.erase(0, 1); execString.erase(execString.size() - 1, 1);
-				cout << "Executing: " << execString << endl;
-				execTrue = executeString(execString);
-				if(execTrue) {
-					userInput.replace(deepOpen, (deepClosed - deepOpen) + 1, "true ");
-				}
-				else {
-					userInput.replace(deepOpen, (deepClosed - deepOpen) + 1, "false ");
-				}
-			}
-			cout << "Input is now: " << userInput << endl;
-			
-		}
-		return;
+		Base* SuperExecutable = new Super(userInput);
+		SuperExecutable->exec();
 	}
-	
-	
-	//new code for parenthesis stack
-	//
-	//
-	//
-	//
-
-	/*stack <string> parenStack;
-	string temp = "";
-	unsigned int j = 0;
-	for(j=j; j < userInput.size(); j++)
-	{
-		char parenCheck = userInput.at(j); 
-		if(parenCheck == '(')
-		{	while(userInput.at(j) != ')')
-			{	j++;
-				temp.push_back(userInput.at(j));
-			}
-			parenStack.push(temp);
-			temp.clear();
-		}
-		else
-		{
-			//do normal commands without parenthesis
-		}
-						
-	}*/	
-
-	//
-	//
-	//
-	//
-
 	//lastly we clear our vectors for the next run
 	userTokens.clear();
 	userComposites.clear();
