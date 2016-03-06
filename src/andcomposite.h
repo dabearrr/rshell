@@ -8,11 +8,18 @@ class AndComposite : public Composite
         AndComposite(bool a, Base* b) { firstCommand = a; secondCommand = b; }
         bool exec() {
 		if(firstCommand) {
-			return secondCommand->exec();
+			bool TempBoolean = secondCommand->exec();
+			if(TempBoolean && firstCommand) {
+				executedTruely = true;
+			}
+			else {
+				executedTruely = false;
+			}
 		}
 		else {
-			return false;
+			executedTruely = false;
 		}
+		return executedTruely;
 	}
 };
 

@@ -29,8 +29,10 @@ class Rshell
     vector<string> userCommands;
     vector<string> userComposites;
     vector<Base*> commands;
-    vector<Base*> composites;
+    vector<Composite*> composites;
     vector<Base*> executables;
+    bool executeString(string execString);
+
     public:
     Rshell();
     void terminal();
