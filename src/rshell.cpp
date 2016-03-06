@@ -397,7 +397,7 @@ void Rshell::parse() {
 				}
 			}
 			if(prevOpen != -1 && (execString.find("||") == string::npos && execString.find("&&")
-			 == string::npos && execString.find(";") == string::npos) ) {
+			== string::npos && execString.find(";") == string::npos) ) {
 				bool seen = true;
 				for(int i = deepClosed + 2; i < static_cast<int>(userInput.size()); i++) {
 					char tempC = userInput.at(i);
