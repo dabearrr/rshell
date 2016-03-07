@@ -2,7 +2,7 @@
 #include <stack>
 using namespace std;
 using namespace boost;
-
+//divides the string and splits it from original
 vector<string> divideS(string t, const char* splitter) {
     char* tempS = new char[t.size() + 1];
     strcpy(tempS, t.c_str());
@@ -18,6 +18,7 @@ vector<string> divideS(string t, const char* splitter) {
 	}
 	return tokens;
 }
+//this function aquires the end parenthesis length
 unsigned int getEPL(string uc, unsigned int loc) {
     unsigned int l = loc + 1;
     stack<char> t;
@@ -37,7 +38,7 @@ unsigned int getEPL(string uc, unsigned int loc) {
     }
     return l;
 }
-
+//finds parenthesis within the original string
 string rP(string s) {
     bool recurse = false;
     stack<char> p;
@@ -67,7 +68,7 @@ string rP(string s) {
     return s;
 }
 
-
+//allows the use of brackets for the test command
 void testBrackets(string &s) {
 	string tempTest = "test ";
 	while(s.find('[') != string::npos) {
@@ -78,7 +79,7 @@ void testBrackets(string &s) {
 		s.erase(tmpPos, 1);
 	}
 }
-
+//finds the deepest parenthesis with the highest precedence
 int deepestPar(string s) {
 	int tempIndex = -1;
 	for(unsigned int i = 0; i < s.size(); i++) {
@@ -89,7 +90,7 @@ int deepestPar(string s) {
 	}
 	return tempIndex;
 }
-
+//isolates the deepest parenthesis with the highest precedence
 string isolateDeep(string s, int &begin, int &end) {
 	char tempChar = 'd';
 	unsigned int i = 0 ;
@@ -111,7 +112,7 @@ string isolateDeep(string s, int &begin, int &end) {
 	//cout << s.at(end) << endl;
 	return tempS;
 }
-
+//filters out the parenthesis from the original string
 void filterP(string uc) {
 	stack<char> t;
 	for(unsigned int r = 0; r < uc.size(); r++) {
@@ -135,7 +136,7 @@ void filterP(string uc) {
 }
 
 
-
+//new class made to handle all parenthesis commands 
 class Super : public Base
 {
     protected:
@@ -167,7 +168,7 @@ class Super : public Base
             bool d = ui.at(q) == o;
             if(d) { deeper = true; }
         }
-        
+        //checks if there is a deeper parenthesis
         if(deeper == true) {
         	string superHold;
         	unsigned int r = 0; 
@@ -227,7 +228,7 @@ class Super : public Base
         			supers.push_back(superHold);
         		}
         	}
-        	//WHILE END
+        	//WHILE loop ENDs here
         	Base* initCommand = new Super(supers.at(0));
         	bool resultF = initCommand->exec();
         	didExec.push_back(resultF);
@@ -272,7 +273,7 @@ class Super : public Base
         	Base* initLeaf = new Command(initExec);
         	bool initialize = initLeaf->exec();
         	didExec.push_back(initialize);
-        	
+        	//for loop to iteratre though string and create objects for composites
         	for(unsigned int r = 0; r < comps.size(); ++r) {
         		Base* consec;
         		
